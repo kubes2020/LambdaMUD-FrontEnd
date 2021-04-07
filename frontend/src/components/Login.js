@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { axiosWithAuth } from "../utils/axiosWithAuth.js";
+import DjangoCSRFToken from "django-react-csrftoken";
 
-export default function Login() {
+export default function Login(props) {
   const [login, setLogin] = useState({
     username: "",
-    password1: "",
+    password: "",
   });
 
   const onChange = (e) => {
@@ -26,8 +27,9 @@ export default function Login() {
         window.localStorage.setItem("token", res.data.key);
         setLogin({
           username: "",
-          password1: "",
+          password: "",
         });
+        props.history.push("/game");
       })
       .catch((err) => {
         console.log("error with login", err);
@@ -38,15 +40,11 @@ export default function Login() {
     <div>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
+        <DjangoCSRFToken />
         <label htmlFor="username">Username</label>
         <input name="username" id="username" type="text" onChange={onChange} />
-        <label htmlFor="password1">Password</label>
-        <input
-          name="password1"
-          id="password1"
-          type="text"
-          onChange={onChange}
-        />
+        <label htmlFor="password">Password</label>
+        <input name="password" id="password" type="text" onChange={onChange} />
         <button>Submit</button>
       </form>
     </div>
